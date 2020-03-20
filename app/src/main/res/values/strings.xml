@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">listView4.1.2</string>
+    <string name="large_text">        First Line        \nSecond line
+        \nThird line        \nFourth Line</string>
+</resources>
