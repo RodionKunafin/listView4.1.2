@@ -18,26 +18,31 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-SimpleAdapter listContentAdapter;
-    private SharedPreferences SharedPreferencessharedPref;
-    private static String NOTE_TEXT = "note_text";
+    SimpleAdapter listContentAdapter;
+    public SharedPreferences SharedPreferencessharedPref;
+    public static String NOTE_TEXT = "note_text";
 
-    private List<Map<String, String>> prepareContent() {
+
+    public List<Map<String, String>> prepareContent() {
         final String[] strings = getString(R.string.large_text).split("\n");
-        SharedPreferencessharedPref=getPreferences(MODE_PRIVATE);
-        SharedPreferences.Editor myEditor=SharedPreferencessharedPref.edit();
+        SharedPreferencessharedPref = getPreferences(MODE_PRIVATE);
+        final SharedPreferences.Editor myEditor = SharedPreferencessharedPref.edit();
+
         myEditor.putString(NOTE_TEXT, String.valueOf(strings));
         myEditor.apply();
-        SharedPreferencessharedPref.getString(NOTE_TEXT, String.valueOf(strings));
 
-        final SwipeRefreshLayout swipeLayout = findViewById(R.id.swiperefresh);
+
+        final SwipeRefreshLayout swipeLayout = findViewById(R.id.swipeRefresh);
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-               SharedPreferencessharedPref.getString(NOTE_TEXT,strings);
-               swipeLayout.setRefreshing(false);
+                listContentAdapter= (SimpleAdapter) prepareContent();
+                listContentAdapter.notifyDataSetChanged();
+                swipeLayout.setRefreshing(false);
             }
         });
+
+
 
         List<Map<String, String>> list = new ArrayList<>();
         for (String string : strings) {
@@ -45,11 +50,11 @@ SimpleAdapter listContentAdapter;
             firstMap.put("left", "Император Человечества");
             firstMap.put("right", "Вот уже более ста веков Император неподвижно восседает на" +
                     " Золотом Троне Земли. По воле богов он является Повелителем Человечества" +
-                            " и правит миллионом миров благодаря мощи своих неисчислимых армий. " +
-                            "Он — гниющий полутруп, чьи незримые муки продлеваются загадочными " +
-                            "устройствами Тёмной Эры Технологий. Он — Разлагающийся Властелин " +
-                            "Империума, которому каждый день приносят в жертву тысячу душ, " +
-                            "чью кровь он пьёт и поедает плоть. На людской крови и плоти зиждется сам Империум");
+                    " и правит миллионом миров благодаря мощи своих неисчислимых армий. " +
+                    "Он — гниющий полутруп, чьи незримые муки продлеваются загадочными " +
+                    "устройствами Тёмной Эры Технологий. Он — Разлагающийся Властелин " +
+                    "Империума, которому каждый день приносят в жертву тысячу душ, " +
+                    "чью кровь он пьёт и поедает плоть. На людской крови и плоти зиждется сам Империум");
             list.add(firstMap);
 
             Map<String, String> secondMap = new HashMap<>();
@@ -72,13 +77,11 @@ SimpleAdapter listContentAdapter;
         setContentView(R.layout.activity_main);
         ListView listView = findViewById(R.id.listView);
 
-
-
         List<Map<String, String>> values = prepareContent();
         String[] from = {"left", "right"};
         int[] to = {R.id.left_text, R.id.right_text};
 
-        BaseAdapter listContentAdapter = new SimpleAdapter(this, values, R.layout.item_simple,from,to);
+        BaseAdapter listContentAdapter = new SimpleAdapter(this, values, R.layout.item_simple, from, to);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -88,8 +91,6 @@ SimpleAdapter listContentAdapter;
         });
         listView.setAdapter(listContentAdapter);
         listContentAdapter.notifyDataSetChanged();
-
-
 
     }
 }
