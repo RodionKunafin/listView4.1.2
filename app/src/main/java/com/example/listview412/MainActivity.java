@@ -24,18 +24,17 @@ public class MainActivity extends AppCompatActivity {
 
     public List<Map<String, String>> prepareContent() {
         String[] strings = getString(R.string.large_text).split("\n");
-        sharedPref = getSharedPreferences("MyNote", MODE_PRIVATE);
-        final String[] strings1 = sharedPref.getString(NOTE_TEXT, null).split("\n");
+        //sharedPref = getSharedPreferences("MyNote", MODE_PRIVATE);
 
 
-        List<Map<String, String>> list = values;
+        //List<Map<String, String>> list = values;
         for (String string : strings) {
             Map<String, String> firstMap = new HashMap<>();
             firstMap.put("left", String.valueOf(string.length()));
             firstMap.put("right", string);
-            list.add(firstMap);
+            values.add(firstMap);
         }
-        return list;
+        return values;
     }
 
     @Override
@@ -45,8 +44,6 @@ public class MainActivity extends AppCompatActivity {
         ListView listView = findViewById(R.id.list);
         final SwipeRefreshLayout swipeLayout = findViewById(R.id.swipeRefresh);
 
-
-        values = prepareContent();
         String[] from = {"left", "right"};
         int[] to = {R.id.left_text, R.id.right_text};
         listContentAdapter = new SimpleAdapter(this, prepareContent(), R.layout.item_simple, from, to);
@@ -74,7 +71,5 @@ public class MainActivity extends AppCompatActivity {
         if (sharedPref.getString(NOTE_TEXT, null) == null) {
             sharedPref.edit().putString(NOTE_TEXT, getString(R.string.large_text)).apply();
         }
-
-
     }
 }
