@@ -7,8 +7,10 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,11 +25,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     public List<Map<String, String>> prepareContent() {
-        String[] strings = getString(R.string.large_text).split("\n");
-        //sharedPref = getSharedPreferences("MyNote", MODE_PRIVATE);
+        sharedPref = getSharedPreferences("MyNote", MODE_PRIVATE);
+        String[] strings = sharedPref.getString(NOTE_TEXT, null).split("\n");
 
-
-        //List<Map<String, String>> list = values;
         for (String string : strings) {
             Map<String, String> firstMap = new HashMap<>();
             firstMap.put("left", String.valueOf(string.length()));
