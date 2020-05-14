@@ -44,6 +44,11 @@ public class MainActivity extends AppCompatActivity {
         ListView listView = findViewById(R.id.list);
         final SwipeRefreshLayout swipeLayout = findViewById(R.id.swipeRefresh);
 
+        sharedPref = getSharedPreferences("MyNote", MODE_PRIVATE);
+        if (!sharedPref.contains(NOTE_TEXT)) {
+            sharedPref.edit().putString(NOTE_TEXT, getString(R.string.large_text)).apply();
+        }
+
         String[] from = {"left", "right"};
         int[] to = {R.id.left_text, R.id.right_text};
         listContentAdapter = new SimpleAdapter(this, prepareContent(), R.layout.item_simple, from, to);
@@ -66,10 +71,5 @@ public class MainActivity extends AppCompatActivity {
                 swipeLayout.setRefreshing(false);
             }
         });
-
-        sharedPref = getSharedPreferences("MyNote", MODE_PRIVATE);
-        if (sharedPref.getString(NOTE_TEXT, null) == null) {
-            sharedPref.edit().putString(NOTE_TEXT, getString(R.string.large_text)).apply();
-        }
     }
 }
